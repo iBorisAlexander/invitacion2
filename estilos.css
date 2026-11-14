@@ -266,6 +266,10 @@ body.lista .hero > :nth-child(4) { animation-delay: .42s; }
   box-shadow: 0 18px 42px rgba(63, 39, 36, .14);
   transform: rotate(-1deg);
 }
+
+.album > h2{
+  color: var(--vino);
+}
 .foto-marco img { display: block; width: 100%; height: auto; }
 .momento h2, .cuenta h2 {
   margin: 0 0 24px;
@@ -677,4 +681,50 @@ body:not(.sin-scroll) .musica-flotante {
   .separador-info {
     width: 78%;
   }
+}
+
+/* =========================================================
+   VESTIMENTA FORMAL
+   ========================================================= */
+.vestimenta {
+
+  text-align: center;
+}
+
+.vestimenta > h2 {
+  margin-bottom: 6px;
+  color: var(--vino);
+
+}
+
+.vestimenta-grupo {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin: 1.8rem auto 0;
+  max-width: 620px;
+}
+
+.vestimenta-item {
+  flex: 1 1 220px;
+  padding: 10px 12px;
+}
+
+.vestimenta-item h3 {
+  margin: 7px 0 8px;
+  color: var(--vino);
+  font-size: clamp(18px, 2.5vw, 23px);
+  font-weight: 600;
+  letter-spacing: .03em;
+}
+
+.vestimenta-item p {
+  margin: 7px auto;
+  line-height: 1.7;
+}
+
+.vestimenta-nota {
+  font-style: italic;
+  margin-top: 1.4rem;
 }
