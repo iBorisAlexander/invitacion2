@@ -1,0 +1,680 @@
+:root {
+  --vino: #6f1725;
+  --vino-oscuro: #481019;
+  --crema: #f5eee8;
+  --texto: #201b1b;
+  --suave: rgba(32, 27, 27, .62);
+  --cursiva: "Great Vibes", "Segoe Script", cursive;
+  --sans: "Montserrat", Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--texto);
+  font-family: var(--sans);
+  background: var(--crema) url("assets/fondo.png") center top / cover fixed;
+  overflow-x: hidden;
+}
+body.sin-scroll { overflow: hidden; }
+button { font: inherit; }
+
+/* PORTADA */
+.portada {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  padding: 24px;
+  background: var(--crema) url("assets/fondo.png") center / cover;
+  transition: opacity 1.1s cubic-bezier(.4,0,.2,1), visibility 1.1s;
+}
+.portada.oculta { opacity: 0; visibility: hidden; pointer-events: none; }
+.portada-contenido { width: min(92vw, 540px); text-align: center; }
+.pretexto {
+  margin: 0 0 14px;
+  color: var(--vino);
+  font-family: var(--cursiva);
+  font-size: clamp(28px, 6vw, 42px);
+}
+.sobre {
+  position: relative;
+  width: min(88vw, 430px);
+  aspect-ratio: 1.38 / 1;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  perspective: 1200px;
+  filter: drop-shadow(0 24px 32px rgba(53, 18, 21, .28));
+  transform: translateZ(0);
+  overflow: visible;
+}
+
+/* Textura común para las distintas piezas del sobre */
+.sobre-cuerpo,
+.frente-sobre,
+.solapa,
+.sobre-lateral {
+  position: absolute;
+  inset: 0;
+  border-radius: 5px;
+  background:
+    linear-gradient(rgba(111,23,37,.84), rgba(111,23,37,.84)),
+    url("assets/sobre.png") center / cover;
+}
+
+.sobre-cuerpo {
+  z-index: 1;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+}
+
+/* Laterales internos: forman la sensación de bolsillo */
+.sobre-lateral {
+  z-index: 3;
+  pointer-events: none;
+  border-radius: 0;
+  background: linear-gradient(145deg, #7a1e2d 0%, #54101b 100%);
+}
+.sobre-lateral-izq {
+  clip-path: polygon(0 0, 54% 50%, 0 100%);
+}
+.sobre-lateral-der {
+  clip-path: polygon(100% 0, 46% 50%, 100% 100%);
+}
+
+/* Tarjeta que sale de dentro */
+.tarjeta-interior {
+  position: absolute;
+  z-index: 2;
+  left: 8%;
+  right: 8%;
+  bottom: 8%;
+  height: 86%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 22px;
+  color: var(--vino);
+  background: var(--crema) url("assets/fondo.png") center / cover;
+  border: 1px solid rgba(111,23,37,.15);
+  border-radius: 3px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.16);
+  opacity: 0;
+  transform: translateY(15%) scale(.97);
+  transition:
+    transform 1.15s cubic-bezier(.22,.75,.2,1) .62s,
+    opacity .28s ease .62s;
+  pointer-events: none;
+}
+.tarjeta-nombres {
+  font-family: var(--cursiva);
+  font-size: clamp(34px, 7vw, 52px);
+  line-height: 1.05;
+}
+.tarjeta-fecha {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 3px;
+}
+
+/* Solapa superior. Se dibuja aparte para poder rotarla en 3D. */
+.solapa {
+  z-index: 6;
+  transform-origin: 50% 0%;
+  transform: rotateX(0deg);
+  backface-visibility: visible;
+  clip-path: polygon(0 0, 100% 0, 50% 58%);
+  background:
+    linear-gradient(rgba(120,28,43,.76), rgba(83,15,25,.88)),
+    url("assets/sobre.png") 50% 16% / 115% auto;
+  transition: transform 1s cubic-bezier(.22,.75,.2,1);
+  filter: drop-shadow(0 8px 8px rgba(39,5,11,.20));
+}
+
+/* Frente inferior: queda por encima de la tarjeta mientras esta sale */
+.frente-sobre {
+  z-index: 4;
+  pointer-events: none;
+  clip-path: polygon(0 34%, 50% 74%, 100% 34%, 100% 100%, 0 100%);
+  background:
+    linear-gradient(rgba(102,18,31,.90), rgba(76,11,21,.96)),
+    url("assets/sobre.png") center bottom / cover;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+.sello {
+  position: absolute;
+  z-index: 7;
+  left: 50%;
+  top: 38%;
+  transform: translate(-50%, -50%);
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  gap: 3px;
+  color: #fff8f1;
+  border: 1px solid rgba(255,255,255,.72);
+  background: rgba(73, 8, 19, .72);
+  box-shadow: inset 0 0 0 5px rgba(255,255,255,.06), 0 6px 16px rgba(0,0,0,.18);
+  transition: opacity .3s ease .15s, transform .45s ease .15s;
+}
+.sello-iniciales { font-family: var(--cursiva); font-size: 31px; line-height: 1; }
+.sello-fecha { font-size: 9px; letter-spacing: 1.7px; }
+
+/* Estado abierto: una sola coreografía con movimientos superpuestos */
+.sobre { transition: transform .5s cubic-bezier(.22,1,.36,1); }
+.sobre:hover { transform: translateY(-3px); }
+.sello::after {
+  content: ""; position: absolute; inset: -1px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.55);
+  animation: selloLatido 2.6s ease-out infinite;
+}
+@keyframes selloLatido { 0% { transform: scale(1); opacity: .7; } 100% { transform: scale(1.45); opacity: 0; } }
+
+.portada .pretexto { transition: opacity .7s ease, transform .9s cubic-bezier(.22,1,.36,1); }
+.portada.abriendo .pretexto { opacity: 0; transform: translateY(-12px); }
+
+.sobre.abriendo { pointer-events: none; animation: sobreAbre 2.2s cubic-bezier(.45,0,.2,1) forwards; }
+.sobre.abriendo .sello { animation: selloSale .6s cubic-bezier(.4,0,.2,1) forwards; }
+.sobre.abriendo .sello::after { animation: none; opacity: 0; }
+.sobre.abriendo .solapa { animation: solapaAbre 1.3s cubic-bezier(.5,0,.15,1) .2s forwards; }
+.sobre.abriendo .tarjeta-interior { animation: tarjetaSube 1.6s cubic-bezier(.2,.9,.3,1.06) .75s forwards; }
+
+@keyframes sobreAbre {
+  14% { transform: translateY(3px) scale(.985); }
+  55%, 100% { transform: translateY(12%) scale(1.02); }
+}
+@keyframes selloSale { to { opacity: 0; transform: translate(-50%, -60%) scale(.7); } }
+@keyframes solapaAbre {
+  0% { transform: rotateX(0deg); z-index: 6; }
+  49% { z-index: 6; }
+  50% { z-index: 0; }
+  100% { transform: rotateX(180deg); z-index: 0; }
+}
+@keyframes tarjetaSube {
+  0% { opacity: 0; transform: translateY(15%) scale(.97) rotate(-1deg); }
+  14% { opacity: 1; }
+  100% { opacity: 1; transform: translateY(-72%) scale(1) rotate(0deg); }
+}
+
+.portada.saliendo .portada-contenido { animation: salidaPortada .95s cubic-bezier(.4,0,.2,1) forwards; }
+@keyframes salidaPortada { to { opacity: 0; transform: translateY(-3%) scale(1.08); filter: blur(6px); } }
+
+/* Entrada escalonada del inicio, cuando se abre la invitación */
+body.lista .hero > * { animation: subir 1.3s cubic-bezier(.2,.8,.2,1) both; }
+body.lista .hero > :nth-child(2) { animation-delay: .14s; }
+body.lista .hero > :nth-child(3) { animation-delay: .28s; }
+body.lista .hero > :nth-child(4) { animation-delay: .42s; }
+@keyframes subir { from { opacity: 0; transform: translateY(20px); } }
+
+[hidden] { display: none !important; }
+
+.boton-abrir {
+  margin-top: 18px;
+  border: 1px solid var(--vino);
+  border-radius: 999px;
+  padding: 12px 28px;
+  background: var(--vino);
+  color: white;
+  cursor: pointer;
+  letter-spacing: .6px;
+  transition: transform .2s ease, background .2s ease;
+}
+.boton-abrir:hover { transform: translateY(-2px); background: var(--vino-oscuro); }
+.toque { margin: 10px 0 0; font-size: 12px; color: var(--suave); letter-spacing: 1px; text-transform: uppercase; }
+
+/* CONTENIDO */
+.pagina { min-height: 100vh; }
+.seccion { width: min(100% - 34px, 980px); margin: 0 auto; text-align: center; }
+
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 12px;
+}
+.detalle { font-size: 13px; letter-spacing: 4px; text-transform: uppercase; color: var(--vino); }
+.hero h1 {
+  margin: 0;
+  max-width: 880px;
+  font-family: var(--cursiva);
+  font-weight: 400;
+  font-size: clamp(54px, 10vw, 100px);
+  line-height: .95;
+  color: var(--vino);
+}
+.hero h1 span { display: block; font-size: .65em; margin: .12em 0; }
+.linea { width: 90px; height: 1px; margin: 30px auto 20px; background: var(--vino); }
+.fecha-corta { margin: 0; letter-spacing: 6px; font-size: 13px; }
+
+.momento { padding: 70px 0 90px; }
+.foto-marco {
+  width: min(74vw, 350px);
+  margin: 0 auto 28px;
+  padding: 10px;
+  background: rgba(255,255,255,.55);
+  box-shadow: 0 18px 42px rgba(63, 39, 36, .14);
+  transform: rotate(-1deg);
+}
+.foto-marco img { display: block; width: 100%; height: auto; }
+.momento h2, .cuenta h2 {
+  margin: 0 0 24px;
+  font-family: var(--cursiva);
+  font-weight: 400;
+  font-size: clamp(38px, 7vw, 58px);
+  color: var(--vino);
+}
+
+.mensaje {
+  padding: 82px 20px;
+  border-top: 1px solid rgba(111,23,37,.14);
+  border-bottom: 1px solid rgba(111,23,37,.14);
+}
+.mensaje p {
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: var(--cursiva);
+  font-size: clamp(35px, 6vw, 55px);
+  line-height: 1.35;
+}
+
+.fecha-principal { padding: 85px 0 60px; }
+.mes { margin: 0 0 28px; font-size: clamp(30px, 5vw, 44px); font-family: Georgia, serif; font-weight: 700; letter-spacing: 2px; }
+.fecha-fila { display: flex; align-items: center; justify-content: center; gap: clamp(14px, 3vw, 30px); }
+.lateral { min-width: 145px; font-size: clamp(18px, 3.2vw, 29px); font-weight: 600; letter-spacing: 1px; }
+.dia { font-family: Georgia, serif; font-size: clamp(62px, 11vw, 102px); line-height: 1; }
+.separador { width: 1px; height: 64px; background: var(--vino); opacity: .75; }
+
+.cuenta { padding: 55px 0 105px; }
+.contador { display: flex; align-items: center; justify-content: center; gap: clamp(9px, 2.2vw, 24px); flex-wrap: nowrap; }
+.unidad { min-width: 82px; }
+.unidad strong { display: block; color: var(--vino); font-family: Georgia, serif; font-size: clamp(34px, 7vw, 64px); font-weight: 500; line-height: 1; }
+.unidad span { display: block; margin-top: 8px; font-size: clamp(9px, 1.8vw, 13px); text-transform: uppercase; letter-spacing: 1.8px; }
+.contador i { color: var(--vino); font-size: 34px; font-style: normal; transform: translateY(-8px); }
+.gran-dia { font-family: var(--cursiva); color: var(--vino); font-size: 48px; }
+
+
+.revelar { opacity: 0; transform: translateY(22px); transition: opacity .8s ease, transform .8s ease; }
+.revelar.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 620px) {
+  body { background-attachment: scroll; }
+  .portada { padding: 14px; }
+  .sobre { width: min(80vw, 330px); }
+  .sello { width: 90px; height: 90px; }
+  .sello-iniciales { font-size: 27px; }
+  .hero { min-height: 92svh; }
+  .seccion { width: min(100% - 22px, 980px); }
+  .mensaje { padding-inline: 8px; }
+  .lateral { min-width: 0; font-size: 15px; }
+  .separador { height: 48px; }
+  .fecha-fila { gap: 10px; }
+  .cuenta { padding-bottom: 75px; }
+  .contador { gap: 5px; }
+  .unidad { min-width: 62px; }
+  .contador i { font-size: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sello::after { display: none; }
+  * { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+}
+
+.sobre.abriendo + .boton-abrir, .portada.saliendo .boton-abrir, .portada.saliendo .toque { opacity: 0; pointer-events: none; }
+.boton-abrir, .toque { transition: opacity .3s ease, transform .2s ease, background .2s ease; }
+
+/* CEREMONIA Y UBICACIÓN */
+.ceremonia {
+  border-top: 1px solid rgba(111,23,37,.14);
+}
+.ceremonia h2,
+.cierre h2 {
+  margin: 4px 0 6px;
+  color: var(--vino);
+  font-family: var(--cursiva);
+  font-size: clamp(48px, 8vw, 72px);
+  font-weight: 400;
+}
+.ornamento {
+  margin: 8px 0 18px;
+  color: var(--vino);
+  font-size: 27px;
+}
+.hora-ceremonia {
+  margin: 0 0 18px;
+  font-family: Georgia, serif;
+  font-size: clamp(27px, 5vw, 40px);
+}
+.direccion {
+  margin: 0 auto 30px;
+  font-size: clamp(15px, 2.4vw, 18px);
+  line-height: 1.8;
+}
+.boton-mapa {
+  display: inline-block;
+  padding: 14px 28px;
+  border: 1px solid var(--vino);
+  border-radius: 999px;
+  color: #fff;
+  background: var(--vino);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  font-size: 12px;
+  transition: transform .2s ease, background .2s ease;
+}
+.boton-mapa:hover { transform: translateY(-2px); background: var(--vino-oscuro); }
+
+/* CIERRE */
+.cierre {
+  padding: 100px 20px 90px;
+  border-top: 1px solid rgba(111,23,37,.14);
+}
+.presencia {
+  margin: 0 0 12px;
+  font-family: Georgia, serif;
+  font-size: clamp(14px, 2.5vw, 19px);
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  text-transform: uppercase;
+}
+.cierre blockquote {
+  margin: 25px auto 10px;
+  max-width: 700px;
+  color: var(--texto);
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: clamp(17px, 3.2vw, 22px);
+  line-height: 1.85;
+}
+.referencia {
+  margin: 0 0 55px;
+  color: var(--vino);
+  font-family: Georgia, serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+.firma-final {
+  color: var(--vino);
+  font-family: var(--cursiva);
+  font-size: clamp(48px, 8vw, 72px);
+}
+.fecha-final {
+  margin: 7px 0 0;
+  font-size: 11px;
+  letter-spacing: 4px;
+}
+
+
+/* =========================================================
+   MÚSICA DE LA INVITACIÓN
+   La canción comienza cuando el invitado toca "Abrir invitación".
+   ========================================================= */
+
+.reproductor-boda {
+  width: min(560px, 92%);
+  margin: 22px auto 8px;
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  border: 1px solid rgba(111, 23, 37, 0.18);
+  border-radius: 20px;
+  background: rgba(255, 252, 247, 0.72);
+  box-shadow: 0 12px 35px rgba(72, 39, 36, 0.08);
+  backdrop-filter: blur(4px);
+}
+
+.reproductor-play {
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--vino);
+  color: #fff8ef;
+  cursor: pointer;
+  font-size: 15px;
+  display: grid;
+  place-items: center;
+  transition: transform .2s ease, box-shadow .2s ease;
+  box-shadow: 0 7px 18px rgba(111, 23, 37, 0.22);
+}
+
+.reproductor-play:hover {
+  transform: scale(1.05);
+}
+
+.reproductor-info {
+  min-width: 0;
+  text-align: left;
+}
+
+.reproductor-info strong,
+.reproductor-info span {
+  display: block;
+}
+
+.reproductor-info strong {
+  color: var(--vino);
+  font-size: 16px;
+  letter-spacing: .02em;
+}
+
+.reproductor-info span {
+  margin-top: 2px;
+  font-size: 12px;
+  opacity: .68;
+}
+
+.barra-audio {
+  height: 4px;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: rgba(111, 23, 37, 0.13);
+}
+
+.progreso-audio {
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--vino);
+  transition: width .25s linear;
+}
+
+.tiempo-audio {
+  min-width: 42px;
+  font-size: 12px;
+  color: var(--vino);
+  font-variant-numeric: tabular-nums;
+}
+
+
+.musica-flotante {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 80;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(255,255,255,.45);
+  border-radius: 50%;
+  background: rgba(111, 23, 37, .92);
+  color: #fff8ef;
+  box-shadow: 0 10px 28px rgba(65, 20, 28, .24);
+  cursor: pointer;
+  display: none;
+  place-items: center;
+  font-size: 20px;
+  backdrop-filter: blur(8px);
+  transition: transform .2s ease, opacity .25s ease;
+}
+
+body:not(.sin-scroll) .musica-flotante {
+  display: grid;
+}
+
+.musica-flotante:hover {
+  transform: scale(1.07);
+}
+
+.musica-flotante.pausada {
+  opacity: .72;
+}
+
+@media (max-width: 560px) {
+  .reproductor-boda {
+    grid-template-columns: 46px 1fr auto;
+    padding: 14px;
+    gap: 11px;
+  }
+
+  .reproductor-play {
+    width: 44px;
+    height: 44px;
+  }
+
+  .musica-flotante {
+    right: 14px;
+    bottom: 14px;
+    width: 46px;
+    height: 46px;
+  }
+}
+
+
+/* =========================================================
+   SECCIONES EXTRA: VESTIMENTA, REGALO, RSVP Y ÁLBUM
+   ========================================================= */
+.album {
+  text-align: center;
+  padding-top: 18px;
+}
+
+.texto-seccion {
+  width: min(680px, 88%);
+  margin: 18px auto 0;
+  line-height: 1.8;
+}
+
+.album .boton-accion {
+  margin: 23px;
+}
+
+.boton-accion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 230px;
+  margin-top: 22px;
+  padding: 14px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--vino);
+  color: #fff8ef;
+  font: inherit;
+  letter-spacing: .06em;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(111, 23, 37, .18);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.boton-accion:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(111, 23, 37, .24);
+}
+
+
+
+/* =========================================================
+   INFORMACIÓN IMPORTANTE — bloque compacto
+   Vestimenta + regalo + confirmación en una sola sección.
+   ========================================================= */
+
+.informacion-importante {
+  padding-top: clamp(52px, 8vw, 88px);
+}
+
+.informacion-importante > h2 {
+  margin-bottom: 6px;
+}
+
+.info-item {
+  width: min(620px, 92%);
+  margin: 0 auto;
+  padding: 20px 12px;
+  text-align: center;
+}
+
+.info-item h3 {
+  margin: 7px 0 8px;
+  color: var(--vino);
+  font-size: clamp(18px, 2.5vw, 23px);
+  font-weight: 600;
+  letter-spacing: .03em;
+}
+
+.info-item p {
+  max-width: 540px;
+  margin: 7px auto;
+  line-height: 1.7;
+}
+
+.info-item .info-destacado {
+  margin-top: 4px;
+  color: var(--vino);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(19px, 3vw, 25px);
+  font-weight: 600;
+}
+
+.info-icono {
+  display: block;
+  color: var(--vino);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.separador-info {
+  width: min(390px, 70%);
+  margin: 2px auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: rgba(111, 23, 37, .62);
+  font-size: 14px;
+}
+
+.separador-info::before,
+.separador-info::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: rgba(111, 23, 37, .18);
+}
+
+.informacion-importante .boton-accion {
+  margin-top: 14px;
+}
+
+@media (max-width: 560px) {
+  .info-item {
+    width: 94%;
+    padding: 17px 6px;
+  }
+
+  .separador-info {
+    width: 78%;
+  }
+}
